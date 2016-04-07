@@ -58,6 +58,7 @@
         svg2lines(doc.children[0]);
       } catch (e) {
         alert(e.message);
+        console.error(e);
       }
     };
     reader.readAsText(file);
@@ -89,7 +90,33 @@
         [x + w, y + h, x, y + h],
         [x, y + h, x, y]
       ];
+    },
+
+    polyline: function (attributes) {
+      var pairSplitter = function (pair) {
+        return pair.split(',').map(parseFloat);
+      };
+      var points = attributes.points.value.split(' ').map(pairSplitter);
+
+      var lines = [];
+      for (var i = 0; i < points.length - 1; i++) {
+        lines.push([points[i][0], points[i][1], points[i + 1][0], points[i + 1][1]]);
+      }
+      return lines;
+    },
+
+    polygon: function (attributes) {
+      var polylineConverter = window.converters.polyline;
+
+      var lines = polylineConverter(attributes);
+      var first = lines[0];
+      var last = lines[lines.length - 1];
+      lines.push([last[0], last[1], first[0], first[1]]);
+
+      return lines;
     }
+
+
   };
 
 
