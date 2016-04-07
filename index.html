@@ -186,7 +186,7 @@
       var lines = polylineConverter(attributes);
       var first = lines[0];
       var last = lines[lines.length - 1];
-      lines.push([last[0], last[1], first[0], first[1]]);
+      lines.push([first[0], first[1], last[2], last[3]]);
 
       return lines;
     },
