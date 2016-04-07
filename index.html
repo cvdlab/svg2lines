@@ -13,7 +13,7 @@
       box-shadow: inset 0 0 30px #8BC34A;
     }
 
-    #btn-download{
+    #btn-download {
       position: fixed;
       top: -9999999px;
     }
@@ -51,18 +51,17 @@
     return false;
   });
 
-  body.addEventListener('drop', function (e) {
-
-    function eventFire(el, etype){
-      if (el.fireEvent) {
-        el.fireEvent('on' + etype);
-      } else {
-        var evObj = document.createEvent('Events');
-        evObj.initEvent(etype, true, false);
-        el.dispatchEvent(evObj);
-      }
+  function eventFire(el, etype) {
+    if (el.fireEvent) {
+      el.fireEvent('on' + etype);
+    } else {
+      var evObj = document.createEvent('Events');
+      evObj.initEvent(etype, true, false);
+      el.dispatchEvent(evObj);
     }
+  }
 
+  body.addEventListener('drop', function (e) {
 
     body.classList.remove('in');
     e.preventDefault();
@@ -93,6 +92,27 @@
 
 
   window.converters = {
+
+    svg: function (attributes, node) {
+      var lines = [];
+
+      for (var i = 0; i < node.childNodes.length; i++) {
+
+        var children = node.childNodes[i];
+        if (children.nodeType !== Node.ELEMENT_NODE) continue;
+
+        var type = children.tagName;
+
+        if (!window.converters[type]) {
+          throw new Error("Spiacente ma al momento i nodi di '" + type + "' non sono supportati");
+        } else {
+          window.converters[type](children.attributes, children).forEach(function (line) {
+            lines.push(line);
+          })
+        }
+      }
+      return lines;
+    },
 
     line: function (attributes) {
       return [
@@ -176,29 +196,13 @@
     if (svg.tagName !== 'svg') {
       throw new Error("Formato non supportato. Caricare SVG.")
     }
-
-    var lines = [];
-    for (var i = 0; i < svg.childNodes.length; i++) {
-      var node = svg.childNodes[i];
-      if (node.nodeType !== Node.ELEMENT_NODE) continue;
-      var type = node.tagName;
-
-      if (!window.converters[type]) {
-        throw new Error("Spiacente ma al momento i nodi di '" + type + "' non sono supportati");
-      } else {
-        window.converters[type](node.attributes, node).forEach(function (line) {
-          lines.push(line);
-        })
-      }
-    }
+    var lines = window.converters['svg'](svg.attributes, svg);
 
     console.log('lines', lines);
 
-    var output = lines.map(function(row) {
+    var output = lines.map(function (row) {
       return row.join(',');
     }).join('\n');
-
-    console.log(output);
 
     return output;
   };
