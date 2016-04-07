@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Metior - points viewer</title>
+  <title>svg2lines</title>
   <style>
     html, body {
       margin: 0 !important;
       padding: 0 !important;
-      height:100%;
+      height: 100%;
     }
 
     .in {
@@ -15,55 +15,96 @@
   </style>
 </head>
 <body>
+
 <div id="holder"></div>
-
-<script src="libs/data-collection.js"></script>
-<script src="libs/snap.svg-min.js"></script>
-<script src="libs/points-viewer.js"></script>
 <script>
-var body = document.getElementsByTagName('body')[0];
-// var holder = document.getElementById('holder');
+  var body = document.getElementsByTagName('body')[0];
 
-window.addEventListener("dragover",function(e){
-  e = e || event;
-  e.preventDefault();
-}, false);
+  window.addEventListener("dragover", function (e) {
+    e = e || event;
+    e.preventDefault();
+  }, false);
 
-window.addEventListener("drop",function(e){
-  e = e || event;
-  e.preventDefault();
-}, false);
+  window.addEventListener("drop", function (e) {
+    e = e || event;
+    e.preventDefault();
+  }, false);
 
-body.addEventListener('dragenter', function (e) {
-  e.preventDefault();
-  console.log('entering');
-  body.classList.add('in');
-  return false;
-});
+  body.addEventListener('dragenter', function (e) {
+    e.preventDefault();
+    console.log('entering');
+    body.classList.add('in');
+    return false;
+  });
 
-body.addEventListener('dragleave', function (e) {
-  e.preventDefault();
-  console.log('leaving');
-  body.classList.remove('in');
-  return false;
-});
+  body.addEventListener('dragleave', function (e) {
+    e.preventDefault();
+    console.log('leaving');
+    body.classList.remove('in');
+    return false;
+  });
 
-body.addEventListener('drop', function (e) {
-  body.classList.remove('in');
-  e.preventDefault();
+  body.addEventListener('drop', function (e) {
+    body.classList.remove('in');
+    e.preventDefault();
 
-  var file = e.dataTransfer.files[0];
-  var reader = new FileReader();
-  reader.onload = function (event) {
-    var text = event.target.result;
-    var old = document.getElementsByTagName('svg')[0];
-    old && body.removeChild(old);
-    import_data(text);
+    var file = e.dataTransfer.files[0];
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var text = event.target.result;
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(text, "image/svg+xml");
+      try {
+        svg2lines(doc.children[0]);
+      } catch (e) {
+        alert(e.message);
+      }
+    };
+    reader.readAsText(file);
+
+    return false;
+  });
+
+
+  window.converters = {
+    line: function (attributes) {
+      return [
+        [
+          parseFloat(attributes.x1.value),
+          parseFloat(attributes.y1.value),
+          parseFloat(attributes.x2.value),
+          parseFloat(attributes.y2.value)
+        ]
+      ];
+    }
   };
-  reader.readAsText(file);
 
-  return false;
-});
+
+  window.svg2lines = function (svg) {
+    if (svg.tagName !== 'svg') {
+      throw new Error("Formato non supportato. Caricare SVG.")
+    }
+
+    var lines = [];
+    for (var i = 0; i < svg.childNodes.length; i++) {
+      var node = svg.childNodes[i];
+      if (node.nodeType !== Node.ELEMENT_NODE) continue;
+      var type = node.tagName;
+
+      if (!window.converters[type]) {
+        throw new Error("Spiacente ma al momento i nodi di '" + type + "' non sono supportati");
+      } else {
+        window.converters[type](node.attributes, node).forEach(function (line) {
+          lines.push(line);
+        })
+      }
+    }
+
+    console.log('lines', lines);
+
+  };
+
+
 </script>
 
 </body>
