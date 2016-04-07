@@ -247,8 +247,8 @@
       height = Math.max(row[1], row[3], height);
       preview.appendChild(DOMLine);
     });
-    preview.setAttribute('width', width);
-    preview.setAttribute('height', height);
+    preview.setAttribute('width', width + 10);
+    preview.setAttribute('height', height + 10);
 
     return output;
   };
