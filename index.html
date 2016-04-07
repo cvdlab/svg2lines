@@ -114,6 +114,10 @@
       return lines;
     },
 
+    g: function (attributes, node) {
+      return window.converters.svg(attributes, node);
+    },
+
     line: function (attributes) {
       return [
         [
