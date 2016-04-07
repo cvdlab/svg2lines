@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Metior - points viewer</title>
+  <style>
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      height:100%;
+    }
+
+    .in {
+      box-shadow: inset 0 0 30px #8BC34A;
+    }
+  </style>
+</head>
+<body>
+<div id="holder"></div>
+
+<script src="libs/data-collection.js"></script>
+<script src="libs/snap.svg-min.js"></script>
+<script src="libs/points-viewer.js"></script>
+<script>
+var body = document.getElementsByTagName('body')[0];
+// var holder = document.getElementById('holder');
+
+window.addEventListener("dragover",function(e){
+  e = e || event;
+  e.preventDefault();
+}, false);
+
+window.addEventListener("drop",function(e){
+  e = e || event;
+  e.preventDefault();
+}, false);
+
+body.addEventListener('dragenter', function (e) {
+  e.preventDefault();
+  console.log('entering');
+  body.classList.add('in');
+  return false;
+});
+
+body.addEventListener('dragleave', function (e) {
+  e.preventDefault();
+  console.log('leaving');
+  body.classList.remove('in');
+  return false;
+});
+
+body.addEventListener('drop', function (e) {
+  body.classList.remove('in');
+  e.preventDefault();
+
+  var file = e.dataTransfer.files[0];
+  var reader = new FileReader();
+  reader.onload = function (event) {
+    var text = event.target.result;
+    var old = document.getElementsByTagName('svg')[0];
+    old && body.removeChild(old);
+    import_data(text);
+  };
+  reader.readAsText(file);
+
+  return false;
+});
+</script>
+
+</body>
+</html>
