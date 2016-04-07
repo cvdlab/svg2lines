@@ -15,10 +15,11 @@
   </style>
 </head>
 <body>
-
+<a href="#" id="btn-download">Download</a>
 <div id="holder"></div>
 <script>
   var body = document.getElementsByTagName('body')[0];
+  var link = document.getElementById('btn-download');
 
   window.addEventListener("dragover", function (e) {
     e = e || event;
@@ -55,7 +56,11 @@
       var parser = new DOMParser();
       var doc = parser.parseFromString(text, "image/svg+xml");
       try {
-        svg2lines(doc.children[0]);
+        var output = svg2lines(doc.children[0]);
+        var data = new Blob([output], {type: 'text/plain'});
+        var url = window.URL.createObjectURL(data);
+        link.setAttribute('download', "output.lines");
+        link.href = url;
       } catch (e) {
         alert(e.message);
         console.error(e);
