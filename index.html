@@ -67,6 +67,7 @@
 
 
   window.converters = {
+
     line: function (attributes) {
       return [
         [
@@ -75,6 +76,18 @@
           parseFloat(attributes.x2.value),
           parseFloat(attributes.y2.value)
         ]
+      ];
+    },
+
+    rect: function (attributes) {
+      var x = parseFloat(attributes.x.value), y = parseFloat(attributes.y.value);
+      var w = parseFloat(attributes.width.value), h = parseFloat(attributes.height.value);
+
+      return [
+        [x, y, x + w, y],
+        [x + w, y, x + w, y + h],
+        [x + w, y + h, x, y + h],
+        [x, y + h, x, y]
       ];
     }
   };
