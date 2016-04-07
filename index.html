@@ -129,7 +129,7 @@
         var type = children.tagName;
 
         if (!window.converters[type]) {
-          throw new Error("Spiacente ma al momento i nodi di '" + type + "' non sono supportati");
+          throw new Error("Sorry, but the node '" + type + "' is not supported");
         } else {
           window.converters[type](children.attributes, children).forEach(function (line) {
             lines.push(line);
@@ -225,7 +225,7 @@
 
   window.svg2lines = function (svg) {
     if (svg.tagName !== 'svg') {
-      throw new Error("Formato non supportato. Caricare SVG.")
+      throw new Error("Sorry, but this file is not supported. Please upload only SVG files.")
     }
     var lines = window.converters['svg'](svg.attributes, svg);
 
