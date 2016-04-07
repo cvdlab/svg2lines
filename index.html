@@ -240,8 +240,9 @@
       DOMLine.setAttribute('y1', row[1]);
       DOMLine.setAttribute('x2', row[2]);
       DOMLine.setAttribute('y2', row[3]);
-      width = Math.max(row[0], row[2]);
-      height = Math.max(row[1], row[3]);
+
+      width = Math.max(row[0], row[2], width);
+      height = Math.max(row[1], row[3], height);
       preview.appendChild(DOMLine);
     });
     preview.setAttribute('width', width);
