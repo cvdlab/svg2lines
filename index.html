@@ -12,6 +12,12 @@
     .in {
       box-shadow: inset 0 0 30px #8BC34A;
     }
+
+    #btn-download{
+      position: fixed;
+      top: -9999999px;
+    }
+
   </style>
 </head>
 <body>
@@ -46,6 +52,18 @@
   });
 
   body.addEventListener('drop', function (e) {
+
+    function eventFire(el, etype){
+      if (el.fireEvent) {
+        el.fireEvent('on' + etype);
+      } else {
+        var evObj = document.createEvent('Events');
+        evObj.initEvent(etype, true, false);
+        el.dispatchEvent(evObj);
+      }
+    }
+
+
     body.classList.remove('in');
     e.preventDefault();
 
@@ -61,6 +79,8 @@
         var url = window.URL.createObjectURL(data);
         link.setAttribute('download', "output.lines");
         link.href = url;
+
+        eventFire(link, 'click');
       } catch (e) {
         alert(e.message);
         console.error(e);
