@@ -18,10 +18,21 @@
       top: -9999999px;
     }
 
-    #holder{
+    #holder {
       text-align: center;
       padding-top: 100px;
       color: #606c71;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    svg line {
+      stroke: black;
+      stroke-width: 1px;
     }
 
   </style>
@@ -29,9 +40,15 @@
 <body>
 <a href="#" id="btn-download">Download</a>
 <div id="holder">drag and drop a SVG file here</div>
+
+<svg id="preview" width="1000" height="1000" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+</svg>
+
 <script>
   var body = document.getElementsByTagName('body')[0];
   var link = document.getElementById('btn-download');
+  var preview = document.getElementById('preview');
 
   window.addEventListener("dragover", function (e) {
     e = e || event;
@@ -213,6 +230,22 @@
     var output = lines.map(function (row) {
       return row.join(',');
     }).join('\n');
+
+    preview.innerHTML = '';
+
+    var width = 0, height = 0;
+    lines.forEach(function (row) {
+      var DOMLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      DOMLine.setAttribute('x1', row[0]);
+      DOMLine.setAttribute('y1', row[1]);
+      DOMLine.setAttribute('x2', row[2]);
+      DOMLine.setAttribute('y2', row[3]);
+      width = Math.max(row[0], row[2]);
+      height = Math.max(row[1], row[3]);
+      preview.appendChild(DOMLine);
+    });
+    preview.setAttribute('width', width);
+    preview.setAttribute('height', height);
 
     return output;
   };
