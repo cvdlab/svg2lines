@@ -197,7 +197,7 @@
       var cy = parseFloat(attributes.cy.value);
       var r = parseFloat(attributes.r.value);
 
-      var linesCount = 20;
+      var linesCount = 36;
       var deltaAlfa = 2 * Math.PI / linesCount;
 
       var points = [];
@@ -205,8 +205,7 @@
       for (var j = 0; j < linesCount; j++) {
         var alfa = j * deltaAlfa;
         var x = r * Math.cos(alfa) + cx;
-        var y = r * Math.cos(alfa) + cy;
-
+        var y = r * Math.sin(alfa) + cy;
         points.push([x, y]);
       }
 
@@ -214,6 +213,9 @@
       for (var i = 0; i < points.length - 1; i++) {
         lines.push([points[i][0], points[i][1], points[i + 1][0], points[i + 1][1]]);
       }
+      var first = points[0];
+      var last = points[points.length - 1];
+      lines.push([first[0], first[1], last[0], last[1]]);
       return lines;
     }
   };
