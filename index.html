@@ -169,6 +169,13 @@
 
     console.log('lines', lines);
 
+    var output = lines.map(function(row) {
+      return row.join(',');
+    }).join('\n');
+
+    console.log(output);
+
+    return output;
   };
 
 
