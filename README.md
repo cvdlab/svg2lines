@@ -15,10 +15,10 @@ SVG standard contenenti le seguenti tipologie di elementi
 - `<polygon>`
 - `<circle>`
 - `<g>`
+- `<path>`
 
 ## Cosa NON supporta
 - `transform="..."`
-- `<path>`
 
 ## Supporto
 Per segnalare incompatibilità aprire un issue al seguente indirizzo https://github.com/cvdlab/svg2lines/issues allegando il file non supportato.
