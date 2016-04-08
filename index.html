@@ -216,6 +216,25 @@
       var last = points[points.length - 1];
       lines.push([first[0], first[1], last[0], last[1]]);
       return lines;
+    },
+
+    path: function (attributes, node) {
+
+      var segmentLength = 10;
+
+      var length = node.getTotalLength();
+
+      var points = [];
+      for (var d = 0; d < length; d += segmentLength) {
+        points.push(node.getPointAtLength(d));
+      }
+      points.push(node.getPointAtLength(length));
+
+      var lines = [];
+      for (var i = 0; i < points.length - 1; i++) {
+        lines.push([points[i].x, points[i].y, points[i + 1].x, points[i + 1].y]);
+      }
+      return lines;
     }
   };
 
