@@ -53,6 +53,8 @@
 
 </svg>
 
+<script src="https://cdn.rawgit.com/jarek-foksa/path-data-polyfill.js/master/path-data-polyfill.js"></script>
+
 <script>
   var body = document.getElementsByTagName('body')[0];
   var link = document.getElementById('btn-download');
@@ -228,6 +230,35 @@
 
       var segmentLength = 10;
 
+      var lines = [];
+
+      var pathStructure = node.getPathData({normalize: true});
+
+      var currentPoint = {x: 0, y: 0};
+      var firstPoint = false;
+      var x, y;
+      for (var seg of pathStructure) {
+
+        if (seg.type === "M") {
+          currentPoint = {x: seg.values[0], y: seg.values[1]};
+        } else if (seg.type === "L") {
+          x = seg.values[0];
+          y = seg.values[1];
+          lines.push([currentPoint.x, currentPoint.y, x, y]);
+          currentPoint = {x: x, y: y};
+        } else if (seg.type === "Z") {
+          lines.push([firstPoint.x, firstPoint.y, currentPoint.x, currentPoint.y, x, y]);
+          break;
+        } else {
+          lines = false;
+          break;
+        }
+
+        if(!firstPoint) firstPoint = currentPoint;
+      }
+
+      if (Array.isArray(lines)) return lines; else lines = [];
+
       var length = node.getTotalLength();
 
       var points = [];
@@ -236,7 +267,7 @@
       }
       points.push(node.getPointAtLength(length));
 
-      var lines = [];
+
       for (var i = 0; i < points.length - 1; i++) {
         lines.push([points[i].x, points[i].y, points[i + 1].x, points[i + 1].y]);
       }
