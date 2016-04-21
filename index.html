@@ -107,9 +107,14 @@
       var doc = parser.parseFromString(text, "image/svg+xml");
       try {
         var output = svg2lines(doc.children[0], preview);
+
+        var filename = "output" + Date.now() + ".lines";
+        filename = window.prompt("Insert output filename", filename);
+        if(!filename) return;
+
         var data = new Blob([output], {type: 'text/plain'});
         var url = window.URL.createObjectURL(data);
-        link.setAttribute('download', "output" + Date.now() + ".lines");
+        link.setAttribute('download', filename);
         link.href = url;
 
         eventFire(link, 'click');
