@@ -106,7 +106,7 @@
       var parser = new DOMParser();
       var doc = parser.parseFromString(text, "image/svg+xml");
       try {
-        var output = svg2lines(doc.children[0]);
+        var output = svg2lines(doc.children[0], preview);
         var data = new Blob([output], {type: 'text/plain'});
         var url = window.URL.createObjectURL(data);
         link.setAttribute('download', "output" + Date.now() + ".lines");
@@ -276,7 +276,7 @@
   };
 
 
-  window.svg2lines = function (svg) {
+  window.svg2lines = function (svg, previewArea) {
     if (svg.tagName !== 'svg') {
       throw new Error("Sorry, but this file is not supported. Please upload only SVG files.")
     }
@@ -288,7 +288,7 @@
       return row.join(',');
     }).join('\n');
 
-    preview.innerHTML = '';
+    previewArea.innerHTML = '';
 
     var width = 0, height = 0;
     lines.forEach(function (row) {
@@ -300,10 +300,10 @@
 
       width = Math.max(row[0], row[2], width);
       height = Math.max(row[1], row[3], height);
-      preview.appendChild(DOMLine);
+      previewArea.appendChild(DOMLine);
     });
-    preview.setAttribute('width', width + 10);
-    preview.setAttribute('height', height + 10);
+    previewArea.setAttribute('width', width + 10);
+    previewArea.setAttribute('height', height + 10);
 
     return output;
   };
