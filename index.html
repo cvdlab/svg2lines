@@ -110,7 +110,7 @@
 
         var filename = "output" + Date.now() + ".lines";
         filename = window.prompt("Insert output filename", filename);
-        if(!filename) return;
+        if (!filename) return;
 
         var data = new Blob([output], {type: 'text/plain'});
         var url = window.URL.createObjectURL(data);
@@ -259,7 +259,7 @@
           break;
         }
 
-        if(!firstPoint) firstPoint = currentPoint;
+        if (!firstPoint) firstPoint = currentPoint;
       }
 
       if (Array.isArray(lines)) return lines; else lines = [];
