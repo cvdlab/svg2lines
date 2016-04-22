@@ -252,7 +252,7 @@
           lines.push([currentPoint.x, currentPoint.y, x, y]);
           currentPoint = {x: x, y: y};
         } else if (seg.type === "Z") {
-          lines.push([firstPoint.x, firstPoint.y, currentPoint.x, currentPoint.y, x, y]);
+          lines.push([firstPoint.x, firstPoint.y, currentPoint.x, currentPoint.y]);
           break;
         } else {
           lines = false;
