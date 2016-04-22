@@ -290,7 +290,11 @@
     console.log('lines', lines);
 
     var output = lines.map(function (row) {
-      return row.join(',');
+      return row
+        .map(function (number) {
+          return Number.isInteger(number) ? number.toFixed(1) : number.toString();
+        })
+        .join(',');
     }).join('\n');
 
     previewArea.innerHTML = '';
