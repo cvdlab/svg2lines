@@ -15,4 +15,7 @@
 
   <circle cx="350" cy="60" r="50" stroke="black" stroke-width="1"/>
 
+  <path id="path4198" d="m-2e2 8e2v4e2h4e2v-4e2h-4e2" stroke="black" stroke-width="1"/>
+
+
 </svg>
