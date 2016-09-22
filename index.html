@@ -84,16 +84,6 @@
     return false;
   });
 
-  function eventFire(el, etype) {
-    if (el.fireEvent) {
-      el.fireEvent('on' + etype);
-    } else {
-      var evObj = document.createEvent('Events');
-      evObj.initEvent(etype, true, false);
-      el.dispatchEvent(evObj);
-    }
-  }
-
   body.addEventListener('drop', function (e) {
 
     body.classList.remove('in');
@@ -117,7 +107,7 @@
         link.setAttribute('download', filename);
         link.href = url;
 
-        eventFire(link, 'click');
+        link.click();
       } catch (e) {
         alert(e.message);
         console.error(e);
